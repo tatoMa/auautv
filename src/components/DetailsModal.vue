@@ -12,6 +12,9 @@
     @click.self="handleCloseClick"
   >
     <div class="info-container">
+
+    <video id="video" class="video-js" />
+
       <details-modal-skeleton v-if="isLoading" />
 
       <div v-else>
@@ -35,7 +38,7 @@
             </h1>
 
             <div class="flex items-center space-x-2">
-              <Button class="bg-white text-black">
+              <Button class="bg-white text-black" @click="handlePlayClick">
                 <IconPlayFill class="text-lg" />
                 <p>Play</p>
               </Button>
@@ -145,7 +148,10 @@ import DetailsModalSkeleton from "../skeletons/DetailsModalSkeleton.vue";
 
 import useMovieDetails from "../hooks/useMovieDetails";
 import useTVDetails from "../hooks/useTVDetails";
-import { state, setModalActive } from "../store";
+import { state, setModalActive, setIsPlaying } from "../store";
+
+import videojs from 'video.js';
+import 'video.js/dist/video-js.css';
 
 const useFetch = {
   tv: useTVDetails,
@@ -154,6 +160,7 @@ const useFetch = {
 
 export default {
   setup() {
+    let played = false;
     const { id, type = "movies" } = state.modalData;
     const [data, isLoading, isError] = useFetch[type](id);
     return {
@@ -179,7 +186,27 @@ export default {
     handleCloseClick() {
       setModalActive(false);
     },
+    handlePlayClick() {
+      setIsPlaying()
+      console.log(state)
+    },
   },
+  mounted() {
+		const element = document.getElementById('video');
+		videojs(element, {
+			autoplay: true,
+        controls: true,
+        fluid: true,
+        aspectRatio: "16:9",
+        fill: true,
+			sources: [
+				{
+					src: 'https://vod3.fsvod3.com/20211123/ZOjycHGY/index.m3u8',
+					type: 'application/x-mpegURL',
+				},
+			],
+		});
+	},
 };
 </script>
 

@@ -4,6 +4,7 @@ const initialState = reactive({
   isModalActive: false,
   scrollTop: 0,
   modalData: null,
+  isPlaying: false
 });
 
 export const setModalActive = function (isActive) {
@@ -19,6 +20,10 @@ export const setModalActive = function (isActive) {
 
 export const setModalData = function (data) {
   initialState.modalData = data;
+};
+
+export const setIsPlaying = function (data) {
+  initialState.isPlaying = !initialState.isPlaying;
 };
 
 export const state = readonly(initialState);
